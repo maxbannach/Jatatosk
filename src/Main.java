@@ -10,6 +10,7 @@ import solver.MSOStateVectorFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -50,32 +51,34 @@ public class Main {
                 /* skip comment lines */
                 if (ll[0].equals("c")) continue;
 
-                /* line is >universe n< and we parse n and create the structure */
-                if (ll[0].equals("universe")) {
-                    if (this.structure != null) throw new Exception("Multiple universe-lines!");
-                    int n = Integer.parseInt(ll[1]);
-                    this.structure = new Structure(n);
-                    continue;
-                }
-                if (this.structure == null) throw new Exception("First declaration has to be a universe-lines!");
-
-                /* line is >vocabulary <R_i> <arity(R_i)> <|R_i|>< and we will the structure with life */
+                /* line is >vocabulary <R_i> <arity(R_i)> < and we will fill the structure with life */
                 if (ll[0].equals("vocabulary")) {
-                    for (int i = 1; i < ll.length; i += 3) {
+                    this.structure = new Structure();
+                    for (int i = 1; i < ll.length; i += 2) {
                         String R = ll[i];
                         int arity = Integer.parseInt(ll[i+1]);
-                        int size = Integer.parseInt(ll[i+2]);
                         structure.addRelation(R, arity);
-                        for (int j = 0; j < size; j++) {
-                            line = in.readLine();
-                            String[] relation = line.split(" ");
-                            if (relation[0].equals("c")) { j--; continue; }
-                            int[] elements = new int[relation.length-1];
-                            for (int k = 1; k < relation.length; k++) elements[k-1] = Integer.parseInt(relation[k]);
-                            structure.setInRelation(R, elements);
-                        }
                     }
+                    continue;
                 }
+                if (this.structure == null) throw new Exception("First declaration has to be the vocabulary!");
+
+                /* line >structure n m< */
+                if (ll[0].equals("structure")) {
+                    int n = Integer.parseInt(ll[1]);
+                    int m = Integer.parseInt(ll[2]);
+                    this.structure.initializeUniverse(n);
+                    for (int j = 0; j < m; j++) {
+                        line = in.readLine();
+                        String[] relation = line.split(" ");
+                        if (relation[0].equals("c")) { j--; continue; }
+                        int[] elements = new int[relation.length-1];
+                        for (int k = 1; k < relation.length; k++) elements[k-1] = Integer.parseInt(relation[k]);
+                        structure.setInRelation(relation[0], elements);
+                    }
+                    continue;
+                }
+                if (this.structure.getUniverseSize() < 0) throw new Exception("Second declaration has to be the structure!");
 
                 /* parse and minimization quantifier */
                 if (ll[0].equals("min")) {

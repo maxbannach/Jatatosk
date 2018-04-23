@@ -27,16 +27,23 @@ public class Structure {
     private Map<String, Integer> arity;
 
     /**
-     * Create an empty structure of the given universe size, where the universe will be 0,1,2,... .
      * By initialization, there is an empty binary, symmetric relation E that encodes a graph.
-     * @param universeSize
      */
-    public Structure(int universeSize) {
+    public Structure() {
         this.universeSize = universeSize;
         this.E = GraphFactory.emptyGraph();
-        for (int v = 0; v < universeSize; v++) this.E.addVertex(v);
         this.relations = new HashMap<>();
         this.arity = new HashMap<>();
+        this.universeSize = -1;
+    }
+
+    /**
+     * Initializes the universe to {0,1,...,universeSize-1}.
+     * @param universeSize
+     */
+    public void initializeUniverse(int universeSize) {
+        this.universeSize = universeSize;
+        for (int v = 0; v < universeSize; v++) this.E.addVertex(v);
     }
 
     /**
