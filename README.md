@@ -2,7 +2,7 @@
 A lightweight model-checker for a small fragment of MSO.
 
 # Build Jatatosk
-Simply execute the following commands to build Jatatosk. You may want to manually get a newer version of [Jdrasil](https://maxbannach.github.io/Jdrasil/), though.
+Simply execute the following commands to build Jatatosk. You may want to manually get a newer version of [Jdrasil](https://github.com/maxbannach/Jdrasil), though.
 ```
 mkdir bin
 javac -cp libs/Jdrasil.jar:src -d bin src/*.java
