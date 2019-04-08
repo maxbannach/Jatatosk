@@ -35,7 +35,7 @@ public class Main {
         this.formulas = new LinkedList<>();
     }
 
-    public void run() {
+    private void run() {
         parseStdIn();
         solve();
     }
@@ -153,15 +153,16 @@ public class Main {
                     Formula psi = new ExFormula(structure);
                     readClauses(psi, Integer.parseInt(ll[1]), in);
                     formulas.add(psi);
-                    continue;
                 }
             }
             in.close();
         } catch (IOException e) {
             System.err.println("Error while reading the input.");
             e.printStackTrace();
+            System.exit(1);
         } catch (Exception e) {
             e.printStackTrace();
+            System.exit(1);
         }
     }
 
@@ -185,7 +186,7 @@ public class Main {
         } catch (Exception e) {
             System.err.println("Failed to compute tree decomposition.");
             e.printStackTrace();
-            return;
+            System.exit(1);
         }
         System.out.println("tw(G) = " + td.getWidth());
 
